@@ -28,6 +28,36 @@ public class JobData {
      * @param field The column to retrieve values from
      * @return List of all of the values of the given field
      */
+    public static ArrayList<HashMap<String, String>> findByValue(String value){
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+            int x = 0;
+            for (String key : row.keySet())
+
+            {
+                String aValue = row.get(key).toLowerCase();
+                if (aValue.contains(value.toLowerCase())) {
+                    x = x + 1;
+                }
+
+            }
+            if (x > 0){
+                jobs.add(row);
+            }
+
+
+        }if (jobs.size()<1){
+            HashMap<String,String > msgError = new HashMap<>();
+            msgError.put("error", "search term not found in listings");
+            jobs.add(msgError);
+        }
+
+        return jobs;
+
+    }
     public static ArrayList<String> findAll(String field) {
 
         // load data, if not already loaded
@@ -74,11 +104,15 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
+            String aValue = row.get(column).toLowerCase();
 
-            if (aValue.contains(value)) {
+            if (aValue.contains(value.toLowerCase())) {
                 jobs.add(row);
             }
+        }if (jobs.size()<1){
+            HashMap<String,String > msgError = new HashMap<>();
+            msgError.put("error", "search term not found in listings");
+            jobs.add(msgError);
         }
 
         return jobs;
